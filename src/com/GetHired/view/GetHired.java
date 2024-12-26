@@ -16,6 +16,7 @@ public class GetHired extends javax.swing.JFrame {
     private LinkedList<GetHiredModel> joblist=new LinkedList<>();
     private LinkedList<GetHiredModel> applicationList=new LinkedList<>();
     private LinkedList<GetHiredModel> companyList=new LinkedList<>();
+    private LinkedList<GetHiredModel> profileList=new LinkedList<>();
     
     
 
@@ -101,6 +102,54 @@ loadCompanyToTable();
         loadApplicationsToTable();
 } 
     
+       private boolean addProfile() {
+     String UserName=txtFldName.getText();
+     String UserAddress=txtFldAddress.getText();
+     String UserContactNo=txtFldContactNo.getText();
+     String UserDOB=txtFldDoB.getText();
+     String UserGender=(String)comboBoxGender.getSelectedItem();
+     String UserEmail=txtFldEmail.getText();
+     String UserQualification=txtFldEducation.getText();
+     String UserYearsOfExperience=(String)ComboBoxYearsOfExperience.getSelectedItem();
+    if (txtFldName.getText().isEmpty()||txtFldAddress.getText().isEmpty()||txtFldContactNo.getText().isEmpty()||txtFldDoB.getText().isEmpty()
+        ||txtFldEmail.getText().isEmpty()||txtFldEducation.getText().isEmpty()){
+    JOptionPane.showMessageDialog(this,"Please Fill All The Fields,Job NOt Added!!","NOT-Sucessful",JOptionPane.ERROR_MESSAGE);
+    }
+    else{
+    GetHiredModel profile=new GetHiredModel(UserName,  UserAddress,  UserContactNo,  UserDOB,  UserGender,  UserEmail,  UserQualification,  UserYearsOfExperience);
+       profileList.add(profile);
+    return true;
+    }
+    return false;
+    }
+       private boolean deletedProfile(String UserContactNo){
+    for (GetHiredModel Profile:profileList){
+        if(Profile.getUserContactNo().equals(UserContactNo)){
+            joblist.remove(Profile);
+            return true;
+        }
+       
+    }
+     return false;
+   
+    }
+       private Boolean updateProfile(GetHiredModel profile){
+        String ContactNo=profile.getUserContactNo();
+        for (GetHiredModel profileUpdate:profileList){
+          if(ContactNo.equals(profileUpdate.getUserContactNo())){
+             profileUpdate.setUserName(profile.getUserName());
+             profileUpdate.setUserAddress(profile.getUserAddress());
+             profileUpdate.setUserDOB(profile.getUserDOB());
+             profileUpdate.setUserGender(profile.getUserGender());
+             profileUpdate.setUserEmail(profile.getUserEmail());
+             profileUpdate.setUserQualification(profile.getUserQualification());
+             profileUpdate.setUserYearsOfExperience(profile.getUserYearsOfExperience());
+              return true;
+              }
+        }
+     return false;
+
+}
     private boolean addJob() {
     int JobId=Integer.parseInt(txtFldJobId.getText()) ;
     String JobName=txtFldJobTitle.getText(); 
@@ -142,7 +191,6 @@ private Boolean updateJob(GetHiredModel job){
              jobupdate.setJobName(job.getJobName());
              jobupdate.setJobLocation(job.getJobLocation());
              jobupdate.setJobDeadline(job.getJobDeadline());
-             jobupdate.setJobLocation(job.getJobLocation());
              jobupdate.setJobQualification(job.getJobQualification());
              jobupdate.setJobSalary(job.getJobSalary());
              jobupdate.setJobType(job.getJobType());
@@ -1587,6 +1635,11 @@ private Boolean updateJob(GetHiredModel job){
         btnUpdateProfile.setBackground(new java.awt.Color(217, 234, 253));
         btnUpdateProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/GetHired/resources/changes (1).png"))); // NOI18N
         btnUpdateProfile.setText("Update Profile");
+        btnUpdateProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateProfileActionPerformed(evt);
+            }
+        });
 
         pnlDeleteProfile.setBackground(new java.awt.Color(217, 234, 253));
 
@@ -1598,10 +1651,20 @@ private Boolean updateJob(GetHiredModel job){
         btnDeleteProfile.setBackground(new java.awt.Color(154, 166, 178));
         btnDeleteProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/GetHired/resources/delete (1).png"))); // NOI18N
         btnDeleteProfile.setText("Delete Profile");
+        btnDeleteProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteProfileActionPerformed(evt);
+            }
+        });
 
         btnClearFormDelete.setBackground(new java.awt.Color(154, 166, 178));
         btnClearFormDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/GetHired/resources/broom (1).png"))); // NOI18N
         btnClearFormDelete.setText("Clear Form");
+        btnClearFormDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearFormDeleteActionPerformed(evt);
+            }
+        });
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1984,7 +2047,18 @@ String PasswordfRomGUI=new String(txtfldPassword.getPassword());
     }//GEN-LAST:event_txtFldAddressActionPerformed
 
     private void btnCreateProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateProfileActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:try{
+    try{if(addProfile()==true){
+        JOptionPane.showMessageDialog(this,"Profile Built!","Successful",JOptionPane.INFORMATION_MESSAGE);
+    }
+    else{
+        JOptionPane.showMessageDialog(this,"Error","Error",JOptionPane.INFORMATION_MESSAGE);
+    }// TODO add your handling code here:
+}
+catch (Exception e) {
+        // Catch any other unexpected exceptions
+        JOptionPane.showMessageDialog(this, "An error occurred while adding the company.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnCreateProfileActionPerformed
 
     private void txtFldContactNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldContactNoActionPerformed
@@ -2251,6 +2325,11 @@ catch(NumberFormatException e) {
 
     private void btnClearFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearFormActionPerformed
         // TODO add your handling code here:
+        txtFieldJobId.setText("");
+        txtFieldFullName.setText("");
+        txtFieldContactNo.setText("");
+         txtFieldQualification.setText("");
+          txtFieldAddress.setText("");
     }//GEN-LAST:event_btnClearFormActionPerformed
 
     private void btnLogOutAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutAdminActionPerformed
@@ -2265,7 +2344,7 @@ catch(NumberFormatException e) {
             JOptionPane.showMessageDialog(this,"Job Deleted Successfully!!","Successful",JOptionPane.INFORMATION_MESSAGE);
         }
         else{
-            JOptionPane.showMessageDialog(this,"Job Deleted Successfully!!","Successful",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this,"Job Not Deleted !!","Error",JOptionPane.INFORMATION_MESSAGE);
         } 
         }
         catch (NumberFormatException e) {
@@ -2344,6 +2423,55 @@ catch(NumberFormatException e) {
     private void LogOutAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutAdminActionPerformed
 loadScreen("LoginScreen");        // TODO add your handling code here:
     }//GEN-LAST:event_LogOutAdminActionPerformed
+
+    private void btnUpdateProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateProfileActionPerformed
+        // TODO add your handling code here:
+       try{String UserName=txtFldName.getText();
+     String UserAddress=txtFldAddress.getText();
+     String UserContactNo=txtFldContactNo.getText();
+     String UserDOB=txtFldDoB.getText();
+     String UserGender=(String)comboBoxGender.getSelectedItem();
+     String UserEmail=txtFldEmail.getText();
+     String UserQualification=txtFldEducation.getText();
+     String UserYearsOfExperience=(String)ComboBoxYearsOfExperience.getSelectedItem();
+    if (txtFldName.getText().isEmpty()||txtFldAddress.getText().isEmpty()||txtFldContactNo.getText().isEmpty()||txtFldDoB.getText().isEmpty()
+        ||txtFldEmail.getText().isEmpty()||txtFldEducation.getText().isEmpty()){
+    JOptionPane.showMessageDialog(this,"Please Fill All The Fields,Profile NOt Added!!","Error",JOptionPane.ERROR_MESSAGE);
+    }
+    else{
+    GetHiredModel updateProfile=new GetHiredModel(UserName,  UserAddress,  UserContactNo,  UserDOB,  UserGender,  UserEmail,  UserQualification,  UserYearsOfExperience);
+       updateProfile(updateProfile);
+        JOptionPane.showMessageDialog(this,"Profile Details Updated", "Successful", JOptionPane.INFORMATION_MESSAGE);
+        }}
+         catch (Exception e) {
+        // Handle any other unexpected exceptions
+        JOptionPane.showMessageDialog(this, "An error occurred while updating the details.", "Error", JOptionPane.ERROR_MESSAGE);
+         // Optionally print the stack trace for debugging
+    }
+    }//GEN-LAST:event_btnUpdateProfileActionPerformed
+
+    private void btnDeleteProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteProfileActionPerformed
+        // TODO add your handling code here:
+          try{
+              String ContactNo=txtFldContactNoDelete.getText();
+        if(deletedProfile(ContactNo)==true){
+
+            JOptionPane.showMessageDialog(this,"Profile Deleted Successfully!!","Successful",JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            JOptionPane.showMessageDialog(this,"Profile Not Deleted !!","Error",JOptionPane.ERROR_MESSAGE);
+        } 
+        }
+        catch (Exception e) {
+        // Catch any other unexpected exceptions
+        JOptionPane.showMessageDialog(this, "An error occurred while deleting the job.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_btnDeleteProfileActionPerformed
+
+    private void btnClearFormDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearFormDeleteActionPerformed
+txtFldContactNoDelete.setText("");
+txtFldNameDelete.setText("");// TODO add your handling code here:
+    }//GEN-LAST:event_btnClearFormDeleteActionPerformed
 
     /**
      * @param args the command line arguments

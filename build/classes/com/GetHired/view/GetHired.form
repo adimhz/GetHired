@@ -2366,6 +2366,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Update Profile"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpdateProfileActionPerformed"/>
+              </Events>
             </Component>
             <Container class="javax.swing.JPanel" name="pnlDeleteProfile">
               <Properties>
@@ -2452,6 +2455,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Delete Profile"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteProfileActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnClearFormDelete">
                   <Properties>
@@ -2463,6 +2469,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Clear Form"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClearFormDeleteActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel12">
                   <Properties>
