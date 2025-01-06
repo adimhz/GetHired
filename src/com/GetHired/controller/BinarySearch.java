@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  *
- * @author Prithivi
+ * @author Adita
  */
 public class BinarySearch {
 
