@@ -6,10 +6,10 @@ package com.GetHired.model;
 
 /**
  *
- * @author Adita Maharjan
- * Lmu Id: 23048638
+ * @author Adita Maharjan Lmu Id: 23048638
  */
 public class GetHiredModel {
+    //Declaring variables required for profiles
     private String UserName;
     private String UserAddress;
     private String UserContactNo;
@@ -18,13 +18,13 @@ public class GetHiredModel {
     private String UserEmail;
     private String UserQualification;
     private String UserYearsOfExperience;
-    
+    //Declaring variables requied for company
     private int CompanyId;
     private String CompanyName;
     private String CompanyLocation;
     private String CompanyContact;
     private String JobVacancyStatus;
-    
+    //Declaring variables required for job
     private int JobId;
     private String JobName;
     private String JobType;
@@ -33,8 +33,9 @@ public class GetHiredModel {
     private String  JobDeadline;
     private String  JobQualification;
     private String  JobCompanyName;
-
-    public GetHiredModel(String UserName, String UserAddress, String UserContactNo, String UserDOB, String UserGender, String UserEmail, String UserQualification, String UserYearsOfExperience) {
+//Constructor for profile
+    public GetHiredModel(String UserName, String UserAddress, String UserContactNo, String UserDOB, String UserGender,
+            String UserEmail, String UserQualification, String UserYearsOfExperience) {
         this.UserName = UserName;
         this.UserAddress = UserAddress;
         this.UserContactNo = UserContactNo;
@@ -44,16 +45,18 @@ public class GetHiredModel {
         this.UserQualification = UserQualification;
         this.UserYearsOfExperience = UserYearsOfExperience;
     }
-
-    public GetHiredModel(int CompanyId, String CompanyName, String CompanyLocation, String CompanyContact,String JobVacancyStatus) {
+//Constructor for company
+    public GetHiredModel(int CompanyId, String CompanyName, String CompanyLocation, String CompanyContact,
+            String JobVacancyStatus) {
         this.CompanyId = CompanyId;
         this.CompanyName = CompanyName;
         this.CompanyLocation = CompanyLocation;
         this.CompanyContact = CompanyContact;
         this.JobVacancyStatus=JobVacancyStatus;
     }
-
-    public GetHiredModel(int JobId, String JobName, String JobType, String JobLocation, int JobSalary, String JobDeadline, String JobQualification, String JobCompanyName) {
+//constructor for Job 
+    public GetHiredModel(int JobId, String JobName, String JobType, String JobLocation, int JobSalary, String JobDeadline,
+            String JobQualification, String JobCompanyName) {
         this.JobId = JobId;
         this.JobName = JobName;
         this.JobType = JobType;
@@ -63,7 +66,7 @@ public class GetHiredModel {
         this.JobQualification = JobQualification;
         this.JobCompanyName = JobCompanyName;
     }
-
+//Constructor for applications
     public GetHiredModel(String UserName, String UserAddress, String UserContactNo, String UserQualification, int JobId) {
         this.UserName = UserName;
         this.UserAddress = UserAddress;
@@ -72,7 +75,7 @@ public class GetHiredModel {
         this.JobId = JobId;
     }
     
-
+//getter methods for all variables
     public String getUserName() {
         return UserName;
     }
@@ -156,7 +159,7 @@ public class GetHiredModel {
     public String getJobCompanyName() {
         return JobCompanyName;
     }
-
+//setter methods of all variables
     public void setUserName(String UserName) {
         this.UserName = UserName;
     }

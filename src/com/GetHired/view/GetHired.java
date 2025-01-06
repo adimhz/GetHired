@@ -2,280 +2,485 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.GetHired.view;
+
 import com.GetHired.model.GetHiredModel;
 import javax.swing.JOptionPane;
 import java.util.LinkedList;
 import javax.swing.table.DefaultTableModel;
+import com.GetHired.controller.InsertionSort;
+import com.GetHired.controller.BinarySearch;
+import com.GetHired.controller.SelectionSort;
+import com.GetHired.controller.MergeSort;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
- *@author Adita Maharjan Lmu Id: 23048638
+ * @author Adita Maharjan Lmu Id: 23048638
  */
 public class GetHired extends javax.swing.JFrame {
+
+    private SelectionSort selectionSort =new SelectionSort();
+    private MergeSort mergeSort=new MergeSort();
+    private  InsertionSort insertionSort=new InsertionSort();
     private java.awt.CardLayout cardLayout;
-    private LinkedList<GetHiredModel> joblist=new LinkedList<>();
-    private LinkedList<GetHiredModel> applicationList=new LinkedList<>();
-    private LinkedList<GetHiredModel> companyList=new LinkedList<>();
-    private LinkedList<GetHiredModel> profileList=new LinkedList<>();
-    
-    
+    private LinkedList<GetHiredModel> joblist = new LinkedList<>();
+    private LinkedList<GetHiredModel> applicationList = new LinkedList<>();
+    private LinkedList<GetHiredModel> companyList = new LinkedList<>();
+    private LinkedList<GetHiredModel> profileList = new LinkedList<>();
 
     /**
      * Creates new form GetHired
      */
     public GetHired() {
+
         initComponents();
         initializeLayout();
-        loadJobinitialdata();
-        loadApplicationInitialData();
-        loadCompanyInitialData();
-        
-         
+        loadInitialData();
+     
+
     }
-   private void loadScreen(String screenName) {
+
+    /*
+    Loads the specifief screen
+    @param screenName
+     */
+    private void loadScreen(String screenName) {
         cardLayout.show(getContentPane(), screenName);
     }
-   private void initializeLayout() {
+
+    /*
+   Initialize layout
+   adds panel to layout screen
+     */
+    private void initializeLayout() {
         cardLayout = new java.awt.CardLayout();
         getContentPane().setLayout(cardLayout);
 
         // Add panels with unique identifiers
-         getContentPane().add(pnlLogin, "LoginScreen");
-         getContentPane().add(pnlAdminMain, "AdminScreen");
-         getContentPane().add(pnlRegister,"RegisterScreen");
-         getContentPane().add(pnlFindAJob, "JobScreen");
-         getContentPane().add(pnlWelcome, "WelcomeScreen");
-         getContentPane().add(pnlMainFindACompany, "CompanyScreen");
-         getContentPane().add(pnlMainBuildProfile, "ProfileScreen");
+        getContentPane().add(pnlLogin, "LoginScreen");
+        getContentPane().add(pnlAdminMain, "AdminScreen");
+        getContentPane().add(pnlRegister, "RegisterScreen");
+        getContentPane().add(pnlFindAJob, "JobScreen");
+        getContentPane().add(pnlWelcome, "WelcomeScreen");
+        getContentPane().add(pnlMainFindACompany, "CompanyScreen");
+        getContentPane().add(pnlMainBuildProfile, "ProfileScreen");
 
         // Start with the login screen
         loadScreen("LoginScreen");
     }
-   public void loadJobToTable(){
-     DefaultTableModel model = (DefaultTableModel) tblAddJob.getModel();
-    model.setRowCount(0);
-    for (GetHiredModel job:joblist){
-        
-        model.addRow(new Object[]{job.getJobId() ,  job.getJobName(), job.getJobType(),job.getJobLocation() ,job.getJobSalary(),job.getJobDeadline(),  job.getJobQualification(),job.getCompanyName()
-        });
-        
-    }}
-   public void loadJobinitialdata(){
-       GetHiredModel Job1=new GetHiredModel(001, "Technical Assistant","Full-Time", "Kathmandu", 10000, "2025/01/30","Bachlors in Technical Studies", "Technical Axis Pvt.Ltd");
-        GetHiredModel Job2=new GetHiredModel(002, "Civil Engineer","Full-Time", "Bhaktapur", 550000, "2025/02/30","Bachlors in Engineering", "Civil Homes");
-        GetHiredModel Job3=new GetHiredModel(003, "Teacher","Part-Time", "Lalitpur", 10000, "2025/01/10","Bachlors in Arts", "Prerana Vidyshram");
+
+    /*
+   loads job to table(GUI)
+     */
+    public void loadJobToTable(List<GetHiredModel> jobs) {
+        DefaultTableModel model = (DefaultTableModel) tblAddJob.getModel();
+        model.setRowCount(0);
+        //loading jobs from job list to table
+        for (GetHiredModel job : jobs) {
+
+            model.addRow(new Object[]{job.getJobId(), job.getJobName(), job.getJobType(), job.getJobLocation(),
+                 job.getJobSalary(), job.getJobDeadline(), job.getJobQualification(), job.getCompanyName()});
+        }
+    }
+
+    /*
+   loads companies to table(GUI)
+     */
+    public void loadCompanyToTable(List<GetHiredModel> Companies) {
+        DefaultTableModel model = (DefaultTableModel) TblFindACompany.getModel();
+        model.setRowCount(0);
+        //loading companies from company list to table
+        for (GetHiredModel Company : Companies) {
+            model.addRow(new Object[]{Company.getCompanyId(), Company.getCompanyName(), Company.getCompanyLocation(),
+                Company.getCompanyContact(), Company.getJobVacancyStatus()});
+        }
+    }
+
+    /*
+     loads applications to the table(GUI)
+     */
+    public void loadApplicationsToTable() {
+        DefaultTableModel model = (DefaultTableModel) tblViewApplication.getModel();
+        model.setRowCount(0);
+        //loading applications from application list to table
+        for (GetHiredModel application : applicationList) {
+            model.addRow(new Object[]{application.getUserName(), application.getUserAddress(), application.getUserContactNo(),
+                application.getUserQualification(), application.getJobId()});
+        }
+    }
+
+    /*
+      Adds initial data to the list and displays it to the table(GUI)
+     */
+    public void loadInitialData() {
+        //Adding initial data of Job details
+       
+        GetHiredModel Job2 = new GetHiredModel(002, "Civil Engineer", "Full-Time", "Bhaktapur", 550000,
+                "2025/02/30", "Bachlors in Engineering", "Civil Homes");
+        GetHiredModel Job3 = new GetHiredModel(003, "Teacher", "Part-Time", "Lalitpur", 10000, "2025/01/10",
+                "Bachlors in Arts", "Prerana Vidyshram");
+        GetHiredModel Job4 = new GetHiredModel(004, "Software Developer", "Full-Time", "Kathmandu", 120000,
+                "2025/01/15", "Bachelors in Computer Science", "Xenium National Academy");
+        GetHiredModel Job5 = new GetHiredModel(005, "Graphic Designer", "Part-Time", "Pokhara", 45000,
+                "2025/02/01", "Diploma in Design", "Balkunj Secondary School");
+         GetHiredModel Job1 = new GetHiredModel(001, "Technical Assistant", "Full-Time", "Kathmandu", 10000,
+                "2025/01/30", "Bachlors in Technical Studies", "Technical Axis Pvt.Ltd");
+        joblist.add(Job4);
+        joblist.add(Job3);
+        joblist.add(Job5);
         joblist.add(Job1);
         joblist.add(Job2);
-        joblist.add(Job3);
-        loadJobToTable();
-   }
-     public void loadCompanyToTable(){
-     DefaultTableModel model = (DefaultTableModel) TblFindACompany.getModel();
-    model.setRowCount(0);
-    for (GetHiredModel Company:companyList){
-        model.addRow(new Object[]{Company.getCompanyId(),Company.getCompanyName(),Company.getCompanyLocation(),Company.getCompanyContact(),Company.getJobVacancyStatus()});
-    }}
-       
-    public void loadCompanyInitialData(){
-GetHiredModel Company1=new GetHiredModel(1,"DigitalAge Nepal", "Patan", "9876579432","Not Available");
-GetHiredModel Company2=new GetHiredModel(2,"Prerana Vidyshram","Godawari","01-5678543","Available");
-GetHiredModel Company3=new GetHiredModel(3,"Civil Homes","Bhaktapur","01-7665624","Available");
-companyList.add(Company1);
-companyList.add(Company2);
-companyList.add(Company3);
-loadCompanyToTable();
-}
-
-     public void loadApplicationsToTable(){
-     DefaultTableModel model = (DefaultTableModel) tblViewApplication.getModel();
-    model.setRowCount(0);
-    for (GetHiredModel application:applicationList){
-        model.addRow(new Object[]{application.getUserName(),application.getUserAddress(),application.getUserContactNo(), application.getUserQualification(),application.getJobId()});
- }}
-      public void loadApplicationInitialData(){
-        GetHiredModel Application1=new GetHiredModel("Sina Shrestha","Lalitpur","9865748323", "Bachlors in Arts",003);
-        GetHiredModel Application2=new GetHiredModel("Rubina Magar","Kathmandu","9887676457", "Bachlors in Technical Studies",001);
-        GetHiredModel Application3=new GetHiredModel("Roshan Ghimire","Bhaktapur","9856748932", "Bachlors in Engineering",002);
+        //Loading data to the table
+        loadJobToTable(joblist);
+        //Adding initial data of application
+        GetHiredModel Application1 = new GetHiredModel("Sina Shrestha", "Lalitpur", "9865748323", "Bachlors in Arts", 003);
+        GetHiredModel Application2 = new GetHiredModel("Rubina Magar", "Kathmandu", "9887676457", "Bachlors in Technical Studies", 001);
+        GetHiredModel Application3 = new GetHiredModel("Roshan Ghimire", "Bhaktapur", "9856748932", "Bachlors in Engineering", 002);
+        GetHiredModel Application4 = new GetHiredModel("Anisha Shrestha", "Lalitpur", "9861234567", "Masters in Management", 004);
+        GetHiredModel Application5 = new GetHiredModel("Bikash Lama", "Pokhara", "9841230987", "Diploma in Design", 005);
         applicationList.add(Application1);
         applicationList.add(Application2);
         applicationList.add(Application3);
+        applicationList.add(Application4);
+        applicationList.add(Application5);
+        //Loading data to the table
         loadApplicationsToTable();
-} 
-    
-       private boolean addProfile() {
-     String UserName=txtFldName.getText();
-     String UserAddress=txtFldAddress.getText();
-     String UserContactNo=txtFldContactNo.getText();
-     String UserDOB=txtFldDoB.getText();
-     String UserGender=(String)comboBoxGender.getSelectedItem();
-     String UserEmail=txtFldEmail.getText();
-     String UserQualification=txtFldEducation.getText();
-     String UserYearsOfExperience=(String)ComboBoxYearsOfExperience.getSelectedItem();
-    if (txtFldName.getText().isEmpty()||txtFldAddress.getText().isEmpty()||txtFldContactNo.getText().isEmpty()||txtFldDoB.getText().isEmpty()
-        ||txtFldEmail.getText().isEmpty()||txtFldEducation.getText().isEmpty()){
-    JOptionPane.showMessageDialog(this,"Please Fill All The Fields,Job NOt Added!!","NOT-Sucessful",JOptionPane.ERROR_MESSAGE);
+        //Adding initial data of company
+        GetHiredModel Company1 = new GetHiredModel(1, "DigitalAge Nepal", "Patan", "9876579432", "Not Available");
+        GetHiredModel Company2 = new GetHiredModel(2, "Prerana Vidyshram", "Godawari", "01-5678543", "Available");
+        GetHiredModel Company3 = new GetHiredModel(3, "Civil Homes", "Bhaktapur", "01-7665624", "Available");
+        GetHiredModel Company4 = new GetHiredModel(4, "InnovateTech", "Lalitpur", "01-5678901", "Available");
+        GetHiredModel Company5 = new GetHiredModel(5, "Creative Studio", "Pokhara", "061-234567", "Not Available");
+        companyList.add(Company1);
+        companyList.add(Company2);
+        companyList.add(Company3);
+        companyList.add(Company4);
+        companyList.add(Company5);
+        //Loading data to the table
+        loadCompanyToTable(companyList);
     }
-    else{
-    GetHiredModel profile=new GetHiredModel(UserName,  UserAddress,  UserContactNo,  UserDOB,  UserGender,  UserEmail,  UserQualification,  UserYearsOfExperience);
-       profileList.add(profile);
-    return true;
-    }
-    return false;
-    }
-       private boolean deletedProfile(String UserContactNo){
-    for (GetHiredModel Profile:profileList){
-        if(Profile.getUserContactNo().equals(UserContactNo)){
-            joblist.remove(Profile);
+
+    /*   Adds profile to the profile list
+     @returns true if profile is added else returns false
+     */
+    private boolean addProfile() {
+        //getting all the data from text fields
+        String UserName = txtFldName.getText();
+        String UserAddress = txtFldAddress.getText();
+        String UserContactNo = txtFldContactNo.getText();
+        String UserDOB = txtFldDoB.getText();
+        String UserGender = (String) comboBoxGender.getSelectedItem();
+        String UserEmail = txtFldEmail.getText();
+        String UserQualification = txtFldEducation.getText();
+        String UserYearsOfExperience = (String) ComboBoxYearsOfExperience.getSelectedItem();
+        //validating all the fields have data
+        if (txtFldName.getText().isEmpty() || txtFldAddress.getText().isEmpty() || txtFldContactNo.getText().isEmpty() || txtFldDoB.getText().isEmpty()
+                || txtFldEmail.getText().isEmpty() || txtFldEducation.getText().isEmpty()) {
+            //displaying error if textfields are empty
+            JOptionPane.showMessageDialog(this, "Please Fill All The Fields,Profile Not Created!!", "NOT-Sucessful", JOptionPane.ERROR_MESSAGE);
+        } else {
+            //adding profile to list if validated
+            GetHiredModel profile = new GetHiredModel(UserName, UserAddress, UserContactNo, UserDOB, UserGender, UserEmail, UserQualification, UserYearsOfExperience);
+            profileList.add(profile);
             return true;
         }
-       
-    }
-     return false;
-   
-    }
-       private Boolean updateProfile(GetHiredModel profile){
-        String ContactNo=profile.getUserContactNo();
-        for (GetHiredModel profileUpdate:profileList){
-          if(ContactNo.equals(profileUpdate.getUserContactNo())){
-             profileUpdate.setUserName(profile.getUserName());
-             profileUpdate.setUserAddress(profile.getUserAddress());
-             profileUpdate.setUserDOB(profile.getUserDOB());
-             profileUpdate.setUserGender(profile.getUserGender());
-             profileUpdate.setUserEmail(profile.getUserEmail());
-             profileUpdate.setUserQualification(profile.getUserQualification());
-             profileUpdate.setUserYearsOfExperience(profile.getUserYearsOfExperience());
-              return true;
-              }
-        }
-     return false;
-
-}
-    private boolean addJob() {
-    int JobId=Integer.parseInt(txtFldJobId.getText()) ;
-    String JobName=txtFldJobTitle.getText(); 
-    String JobType=txtFldJobType.getText();
-    String JobLocation=txtFldJobLocation.getText();
-    int Salary=Integer.parseInt(txtFldSalary.getText());
-    String Deadline=txtFldDeadline.getText();
-    String Qualification=txtFldQualification.getText();
-    String CompanyName=txtFldCompanyNameAddJob.getText();
-    if (txtFldJobId.getText().isEmpty()||txtFldJobTitle.getText().isEmpty()||txtFldJobType.getText().isEmpty()||txtFldJobLocation.getText().isEmpty()||txtFldSalary.getText().isEmpty()
-        ||txtFldDeadline.getText().isEmpty()||txtFldQualification.getText().isEmpty()||txtFldCompanyNameAddJob.getText().isEmpty()){
-    JOptionPane.showMessageDialog(this,"Please Fill All The Fields,Job NOt Added!!","NOT-Sucessful",JOptionPane.ERROR_MESSAGE);
-    }
-    else{
-    GetHiredModel job=new GetHiredModel( JobId, JobName, JobType, JobLocation,Salary, Deadline,Qualification, CompanyName);
-        joblist.add(job);
-        loadJobToTable();
-    return true;
-    }
-    return false;
-    }
-private boolean deletedJob(int JobId){
-    for (GetHiredModel job:joblist){
-        if(job.getJobId()==JobId){
-            joblist.remove(job);
-            loadJobToTable();
-            return true;
-        }
-       
-    }
-    loadJobToTable();
-     return false;
-   
-    }
-private Boolean updateJob(GetHiredModel job){
-        int JobID=job.getJobId();
-        for (GetHiredModel jobupdate:joblist){
-          if(JobID==jobupdate.getJobId()){
-             jobupdate.setJobName(job.getJobName());
-             jobupdate.setJobLocation(job.getJobLocation());
-             jobupdate.setJobDeadline(job.getJobDeadline());
-             jobupdate.setJobQualification(job.getJobQualification());
-             jobupdate.setJobSalary(job.getJobSalary());
-             jobupdate.setJobType(job.getJobType());
-             jobupdate.setJobCompanyName(job.getJobCompanyName());
-             loadJobToTable();
-              return true;
-              }
-        }
-    loadJobToTable();
-     return false;
-
-}
-
-
-    private void addCompany(GetHiredModel Company) {
-        companyList.add(Company);
-         loadCompanyToTable();
-        }
-    
-    private boolean deletedCompany(int CompanyId){
-        
-    for (GetHiredModel company:companyList){
-        
-        if(company.getCompanyId()==CompanyId){
-            companyList.remove(company);
-            loadCompanyToTable();
-            return true;
-        }
-       
-    }
-    loadCompanyToTable();
-     return false;
-   
-    }
-    private Boolean updateCompany(GetHiredModel company){
-        int ID=company.getCompanyId();
-        for (GetHiredModel Companyupdate:companyList){
-          if(ID==Companyupdate.getCompanyId()){
-            Companyupdate.setCompanyName(company.getCompanyName());
-            Companyupdate.setCompanyLocation(company.getCompanyLocation());
-            Companyupdate.setCompanyContact(company.getCompanyContact());
-            Companyupdate.setJobVacancyStatus(company.getJobVacancyStatus());
-             loadCompanyToTable();
-              return true;
-              }
-        }
-    loadJobToTable();
-     return false;}
-    private boolean addApplication() {
-        loadApplicationsToTable();
-         int JobId=Integer.parseInt(txtFieldJobId.getText());
-        String Name=txtFieldFullName.getText();
-        String Qualification=txtFieldQualification.getText();
-        String Address=txtFieldAddress.getText();
-        String Contact=txtFieldContactNo.getText();
-        if(txtFieldJobId.getText().isEmpty()||
-                txtFieldFullName.getText().isEmpty()||
-                txtFieldQualification.getText().isEmpty()||
-                txtFieldAddress.getText().isEmpty()||
-               txtFieldContactNo.getText().isEmpty()){
         return false;
     }
-        else{
-        GetHiredModel Application=new GetHiredModel(Name,Address,Contact,Qualification,JobId);
-        applicationList.add(Application);
-        loadApplicationsToTable();
-        return true;
+
+    private boolean deletedProfile(String UserContactNo) {
+        for (GetHiredModel Profile : profileList) {
+            if (Profile.getUserContactNo().equals(UserContactNo)) {
+                joblist.remove(Profile);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /*@updates the profile from profilr list
+       @returns true if profile is updated else returns false
+     */
+    private Boolean updateProfile() {
+        String UserName = txtFldName.getText();
+        String UserAddress = txtFldAddress.getText();
+        String UserContactNo = txtFldContactNo.getText();
+        String UserDOB = txtFldDoB.getText();
+        String UserGender = (String) comboBoxGender.getSelectedItem();
+        String UserEmail = txtFldEmail.getText();
+        String UserQualification = txtFldEducation.getText();
+        String UserYearsOfExperience = (String) ComboBoxYearsOfExperience.getSelectedItem();
+        if (txtFldName.getText().isEmpty() || txtFldAddress.getText().isEmpty()
+                || txtFldContactNo.getText().isEmpty() || txtFldDoB.getText().isEmpty()
+                || txtFldEmail.getText().isEmpty() || txtFldEducation.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please Fill All The Fields,Profile NOt Added!!", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+          
+            for (GetHiredModel profileUpdate : profileList) {
+                if (UserContactNo.equals(profileUpdate.getUserContactNo())) {
+                    profileUpdate.setUserName(UserName);
+                    profileUpdate.setUserAddress(UserAddress);
+                    profileUpdate.setUserDOB(UserDOB);
+                    profileUpdate.setUserGender(UserGender);
+                    profileUpdate.setUserEmail(UserEmail);
+                    profileUpdate.setUserQualification(UserQualification);
+                    profileUpdate.setUserYearsOfExperience(UserYearsOfExperience);
+                    return true;
+                }
+            }
+            JOptionPane.showMessageDialog(this, "Contact ID not found", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return false;
+    }
+
+    /**
+     * adds job to the job list and displays to GUI of user
+     *
+     * @return true if the job is added else returns false
+     */
+    private boolean addJob() {
+        int JobId = Integer.parseInt(txtFldJobId.getText());
+        String JobName = txtFldJobTitle.getText();
+        String JobType = txtFldJobType.getText();
+        String JobLocation = txtFldJobLocation.getText();
+        int Salary = Integer.parseInt(txtFldSalary.getText());
+        String Deadline = txtFldDeadline.getText();
+        String Qualification = txtFldQualification.getText();
+        String CompanyName = txtFldCompanyNameAddJob.getText();
+        if (txtFldJobId.getText().isEmpty() || txtFldJobTitle.getText().isEmpty()
+                || txtFldJobType.getText().isEmpty() || txtFldJobLocation.getText().isEmpty() || txtFldSalary.getText().isEmpty()
+                || txtFldDeadline.getText().isEmpty() || txtFldQualification.getText().isEmpty()
+                || txtFldCompanyNameAddJob.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please Fill All The Fields,Job NOt Added!!", "NOT-Sucessful",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else {
+            for (GetHiredModel jobId : joblist) {
+                if (JobId == jobId.getJobId()) {
+                    JOptionPane.showMessageDialog(this, "Job Id already exists!!", "NOT-Sucessful", JOptionPane.ERROR_MESSAGE);
+                    return false;
+
+                }
+                GetHiredModel job = new GetHiredModel(JobId, JobName, JobType, JobLocation, Salary, Deadline, Qualification, CompanyName);
+                joblist.add(job);
+                loadJobToTable(joblist);
+                return true;
+            }
+        }
+        return false;
+    }
+/*
+    deletes job from joblist
+    @param JobId
+    @returns true if job is deleted else returns false
+    */
+    private boolean deletedJob(int JobId) {
+        for (GetHiredModel job : joblist) {
+            if (job.getJobId() == JobId) {
+                joblist.remove(job);
+                loadJobToTable(joblist);
+                return true;
+            }
+
+        }
+        loadJobToTable(joblist);
+        return false;
+
+    }
+
+    /*
+Updates job from the job list 
+@returns true if job is updated else returns false
+     */
+    private Boolean updateJob() {
+        //Get all the values from text field
+        int JobId = Integer.parseInt(txtFldJobId.getText());
+        String JobName = txtFldJobTitle.getText();
+        String JobType = txtFldJobType.getText();
+        String JobLocation = txtFldJobLocation.getText();
+        int Salary = Integer.parseInt(txtFldSalary.getText());
+        String Deadline = txtFldDeadline.getText();
+        String Qualification = txtFldQualification.getText();
+        String CompanyName = txtFldCompanyNameAddJob.getText();
+        //validates if all the test fields are filled
+        if (txtFldJobId.getText().isEmpty() || txtFldJobTitle.getText().isEmpty()
+                || txtFldJobType.getText().isEmpty() || txtFldJobLocation.getText().isEmpty() || txtFldSalary.getText().isEmpty()
+                || txtFldDeadline.getText().isEmpty() || txtFldQualification.getText().isEmpty()
+                || txtFldCompanyNameAddJob.getText().isEmpty()) {
+            //prints error if one or more textfields are empty
+            JOptionPane.showMessageDialog(this, "Please Fill All The Fields,Job not updated!!", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } 
+        else {
+            
+            //compares the id in text field to the ids in list
+            for (GetHiredModel jobupdate : joblist) {
+                //if id is matched updates the details of the job
+                if (JobId == jobupdate.getJobId()) {
+                    jobupdate.setJobName(JobName);
+                    jobupdate.setJobLocation(JobLocation);
+                    jobupdate.setJobDeadline(Deadline);
+                    jobupdate.setJobQualification(Qualification);
+                    jobupdate.setJobSalary(Salary);
+                    jobupdate.setJobType(JobType);
+                    jobupdate.setJobCompanyName(CompanyName);
+                    //loads updated data to table
+                    loadJobToTable(joblist);
+                    return true;
+                }
+            }
+            //shows error if job id does not match
+            JOptionPane.showMessageDialog(this, "Job Id Not found", "Error", JOptionPane.ERROR_MESSAGE);
+            loadJobToTable(joblist);
+            return false;
         }
     }
-      
-    private boolean deletedApplication(String UserName,int JobId){
-    for (GetHiredModel application:applicationList){
-        if(application.getJobId()==JobId){
-            if(application.getUserName().equals(UserName)){
-            applicationList.remove(application);
+
+    /*
+Adds company to company list and displays it to users
+@return true if company is added else returns false
+     */
+    private boolean addCompany() {
+        //getting values from text fields of GUI
+        int CompanyId = Integer.parseInt(txtFldCompanyId.getText());
+        String CompanyName = txtFldCompanyName.getText();
+        String CompanyLocation = txtFldCompanyLocation.getText();
+        String CompanyContact = txtFldContactDetails.getText();
+        String JobVacancyStatus = (String) comboBoxJobStatus.getSelectedItem();
+        //Validating all the textfields are not empty
+        if (txtFldCompanyId.getText().isEmpty()
+                || CompanyName.isEmpty()
+                || CompanyLocation.isEmpty()
+                || CompanyContact.isEmpty()
+                || JobVacancyStatus == null || JobVacancyStatus.isEmpty()) {
+
+            JOptionPane.showMessageDialog(this, "Please fill all the fields.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            //Checking for same id in the list
+            for (GetHiredModel company : companyList) {
+                if (CompanyId == company.getCompanyId()) {
+                    //Displays error if same id is found
+                    JOptionPane.showMessageDialog(this, "Company ID already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                } else {
+                    //Adds company to list after validation
+                    GetHiredModel Company = new GetHiredModel(CompanyId, CompanyName, CompanyLocation, CompanyContact, JobVacancyStatus);
+                    companyList.add(Company);
+                    loadCompanyToTable(companyList);
+
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean deletedCompany(int CompanyId) {
+
+        for (GetHiredModel company : companyList) {
+
+            if (company.getCompanyId() == CompanyId) {
+                companyList.remove(company);
+                loadCompanyToTable(companyList);
+                return true;
+            }
+
+        }
+        loadCompanyToTable(companyList);
+        return false;
+
+    }
+    /*
+    updates the details of company
+    @returns true if details of compnay is updated else returns false
+    */
+
+    private Boolean updateCompany() {
+        int CompanyId = Integer.parseInt(txtFldCompanyId.getText());
+        String CompanyName = txtFldCompanyName.getText();
+        String CompanyLocation = txtFldCompanyLocation.getText();
+        String CompanyContact = txtFldContactDetails.getText();
+        String JobVacancyStatus = (String) comboBoxJobStatus.getSelectedItem();
+        if (txtFldCompanyId.getText().isEmpty()
+                || txtFldCompanyName.getText().isEmpty()
+                || txtFldCompanyLocation.getText().isEmpty()
+                || txtFldContactDetails.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please Enter All Fields", "Error", JOptionPane.ERROR_MESSAGE);
+        } 
+        else {
+                for (GetHiredModel Companyupdate : companyList) {
+                if (CompanyId == Companyupdate.getCompanyId()) {
+                    Companyupdate.setCompanyName(CompanyName);
+                    Companyupdate.setCompanyLocation(CompanyLocation);
+                    Companyupdate.setCompanyContact(CompanyContact);
+                    Companyupdate.setJobVacancyStatus(JobVacancyStatus);
+                    loadCompanyToTable(companyList);
+                    return true;
+                }
+            }
+            JOptionPane.showMessageDialog(this, "Company ID does not exists", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        loadCompanyToTable(companyList);
+        return false;
+    }
+
+    /*
+    Adds Job application to the application to list and displays it to the admin
+    @return true if apllication is added after validateion else returns false
+     */
+    private boolean addApplication() {
+        //Get all the data from text fields
+        int JobId = Integer.parseInt(txtFieldJobId.getText());
+        String Name = txtFieldFullName.getText();
+        String Qualification = txtFieldQualification.getText();
+        String Address = txtFieldAddress.getText();
+        String Contact = txtFieldContactNo.getText();
+        //Validates if all the text fields are filled
+        if (txtFieldJobId.getText().isEmpty()
+                || txtFieldFullName.getText().isEmpty()
+                || txtFieldQualification.getText().isEmpty()
+                || txtFieldAddress.getText().isEmpty()
+                || txtFieldContactNo.getText().isEmpty()) {
             loadApplicationsToTable();
-            return true;
-        }}
-       
+            JOptionPane.showMessageDialog(this, "Please Fill All the fields!", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else {
+            //Searches for job ID and adds application to list of found
+            for (GetHiredModel Application : applicationList) {
+                if (Application.getJobId() == JobId) {
+                    GetHiredModel application = new GetHiredModel(Name, Address, Contact, Qualification, JobId);
+                    applicationList.add(application);
+                    loadApplicationsToTable();
+                    return true;
+                }
+            }
+            //displays error if job id is not found
+            JOptionPane.showMessageDialog(this, "Job does not exist", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return false;
     }
-    loadApplicationsToTable();
-     return false;
-   
+/*
+    Deletes applications from list
+    @param UserName
+    @param JobId
+    @returns true if application is deleted else returns false
+    */
+    private boolean deletedApplication(String UserName, int JobId) {
+        for (GetHiredModel application : applicationList) {
+            if (application.getJobId() == JobId) {
+                if (application.getUserName().equals(UserName)) {
+                    applicationList.remove(application);
+                    loadApplicationsToTable();
+                    return true;
+                }
+            }
+
+        }
+        loadApplicationsToTable();
+        return false;
+
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -384,13 +589,15 @@ private Boolean updateJob(GetHiredModel job){
         pnlMainFindACompany = new javax.swing.JPanel();
         lblAdminTitle2 = new javax.swing.JLabel();
         lblLogo2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        txtFldSearch = new javax.swing.JTextField();
         btnLogOut = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         TblFindACompany = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
-        Back = new javax.swing.JButton();
+        btnSortByCompanyId = new javax.swing.JButton();
+        ButnBack = new javax.swing.JButton();
+        btnSearch = new javax.swing.JButton();
+        btnSortByCompanyName = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         pnlMainBuildProfile = new javax.swing.JPanel();
         pnlBuildProfile = new javax.swing.JPanel();
         txtFldName = new javax.swing.JTextField();
@@ -428,7 +635,7 @@ private Boolean updateJob(GetHiredModel job){
         lblRegistration = new javax.swing.JLabel();
         btnRegister = new javax.swing.JButton();
         lblLoginPageLogo = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnLoginAsAdmin = new javax.swing.JButton();
         txtfldPassword = new javax.swing.JPasswordField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -695,11 +902,6 @@ private Boolean updateJob(GetHiredModel job){
         txtFldContactDetails.setBorder(javax.swing.BorderFactory.createTitledBorder("Contact Details"));
 
         txtFldCompanyName.setBorder(javax.swing.BorderFactory.createTitledBorder("Company Name"));
-        txtFldCompanyName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFldCompanyNameActionPerformed(evt);
-            }
-        });
 
         txtFldCompanyId.setBorder(javax.swing.BorderFactory.createTitledBorder("Company ID"));
 
@@ -899,47 +1101,11 @@ private Boolean updateJob(GetHiredModel job){
 
         lblNameRegister.setText("Name");
 
-        txtFldAddressRegister.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFldAddressRegisterActionPerformed(evt);
-            }
-        });
-
         lblAddressRegister.setText("Address");
 
         lblContactNoRegister.setText("Contact No");
 
-        txtFldContactNoRegister.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFldContactNoRegisterActionPerformed(evt);
-            }
-        });
-
-        txtFldDOBRegister.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFldDOBRegisterActionPerformed(evt);
-            }
-        });
-
         lblDoBRegister.setText("Date Of Birth");
-
-        txtFldEmailRegister.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFldEmailRegisterActionPerformed(evt);
-            }
-        });
-
-        txtFldpasswordRegister.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFldpasswordRegisterActionPerformed(evt);
-            }
-        });
-
-        txtFldReconfirmPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFldReconfirmPasswordActionPerformed(evt);
-            }
-        });
 
         lblEmailRegister.setText("Email ID");
 
@@ -1274,43 +1440,23 @@ private Boolean updateJob(GetHiredModel job){
 
         btnSortById.setBackground(new java.awt.Color(217, 234, 253));
         btnSortById.setText("Sort By ID");
+        btnSortById.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSortByIdActionPerformed(evt);
+            }
+        });
 
         PnlApplyForJob.setBackground(new java.awt.Color(217, 234, 253));
 
         txtFieldJobId.setBorder(javax.swing.BorderFactory.createTitledBorder("Job ID"));
-        txtFieldJobId.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFieldJobIdActionPerformed(evt);
-            }
-        });
 
         txtFieldContactNo.setBorder(javax.swing.BorderFactory.createTitledBorder("Contact No."));
-        txtFieldContactNo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFieldContactNoActionPerformed(evt);
-            }
-        });
 
         txtFieldAddress.setBorder(javax.swing.BorderFactory.createTitledBorder("Address"));
-        txtFieldAddress.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFieldAddressActionPerformed(evt);
-            }
-        });
 
         txtFieldFullName.setBorder(javax.swing.BorderFactory.createTitledBorder("Full Name"));
-        txtFieldFullName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFieldFullNameActionPerformed(evt);
-            }
-        });
 
         txtFieldQualification.setBorder(javax.swing.BorderFactory.createTitledBorder("Qualification"));
-        txtFieldQualification.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFieldQualificationActionPerformed(evt);
-            }
-        });
 
         BtnApplyForJob.setBackground(new java.awt.Color(154, 166, 178));
         BtnApplyForJob.setText("Apply For Job");
@@ -1477,8 +1623,6 @@ private Boolean updateJob(GetHiredModel job){
 
         lblLogo2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/GetHired/resources/resized.png"))); // NOI18N
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/GetHired/resources/search (1).png"))); // NOI18N
-
         btnLogOut.setBackground(new java.awt.Color(217, 234, 253));
         btnLogOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/GetHired/resources/logout (1) (1).png"))); // NOI18N
         btnLogOut.setText("Log Out");
@@ -1499,19 +1643,42 @@ private Boolean updateJob(GetHiredModel job){
         ));
         jScrollPane2.setViewportView(TblFindACompany);
 
-        jButton3.setBackground(new java.awt.Color(217, 234, 253));
-        jButton3.setText("Sort By CompanyId");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnSortByCompanyId.setBackground(new java.awt.Color(217, 234, 253));
+        btnSortByCompanyId.setText("Sort By Company Id");
+        btnSortByCompanyId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnSortByCompanyIdActionPerformed(evt);
             }
         });
 
-        Back.setBackground(new java.awt.Color(217, 234, 253));
-        Back.setText("Back");
-        Back.addActionListener(new java.awt.event.ActionListener() {
+        ButnBack.setBackground(new java.awt.Color(217, 234, 253));
+        ButnBack.setText("Back");
+        ButnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BackActionPerformed(evt);
+                ButnBackActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/GetHired/resources/search (1).png"))); // NOI18N
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        btnSortByCompanyName.setBackground(new java.awt.Color(217, 234, 253));
+        btnSortByCompanyName.setText("Sort By Company Name");
+        btnSortByCompanyName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSortByCompanyNameActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Load all data");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -1519,30 +1686,35 @@ private Boolean updateJob(GetHiredModel job){
         pnlMainFindACompany.setLayout(pnlMainFindACompanyLayout);
         pnlMainFindACompanyLayout.setHorizontalGroup(
             pnlMainFindACompanyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlMainFindACompanyLayout.createSequentialGroup()
-                .addGap(142, 142, 142)
-                .addGroup(pnlMainFindACompanyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlMainFindACompanyLayout.createSequentialGroup()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(Back, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlMainFindACompanyLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(119, 119, 119)
-                        .addComponent(btnLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainFindACompanyLayout.createSequentialGroup()
                 .addComponent(lblLogo2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblAdminTitle2, javax.swing.GroupLayout.PREFERRED_SIZE, 707, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMainFindACompanyLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 815, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(pnlMainFindACompanyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlMainFindACompanyLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSearch)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtFldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1)
+                        .addGap(32, 32, 32)
+                        .addComponent(btnLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlMainFindACompanyLayout.createSequentialGroup()
+                        .addGap(86, 86, 86)
+                        .addComponent(btnSortByCompanyId, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(108, 108, 108)
+                        .addComponent(btnSortByCompanyName, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ButnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)))
+                .addGap(68, 68, 68))
+            .addGroup(pnlMainFindACompanyLayout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 752, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlMainFindACompanyLayout.setVerticalGroup(
             pnlMainFindACompanyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1556,15 +1728,17 @@ private Boolean updateJob(GetHiredModel job){
                         .addComponent(btnLogOut))
                     .addGroup(pnlMainFindACompanyLayout.createSequentialGroup()
                         .addGap(9, 9, 9)
-                        .addGroup(pnlMainFindACompanyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlMainFindACompanyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtFldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSearch)
+                            .addComponent(jButton1))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                .addGroup(pnlMainFindACompanyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addGroup(pnlMainFindACompanyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ButnBack)
+                    .addComponent(btnSortByCompanyId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSortByCompanyName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18))
         );
 
@@ -1573,23 +1747,11 @@ private Boolean updateJob(GetHiredModel job){
         pnlBuildProfile.setMinimumSize(new java.awt.Dimension(832, 700));
         pnlBuildProfile.setPreferredSize(new java.awt.Dimension(832, 700));
 
-        txtFldDoB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFldDoBActionPerformed(evt);
-            }
-        });
-
         lblName.setText("Name");
 
         lblAddress.setText("Address");
 
         lblContactNo.setText("Contact No");
-
-        txtFldAddress.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFldAddressActionPerformed(evt);
-            }
-        });
 
         btnCreateProfile.setBackground(new java.awt.Color(217, 234, 253));
         btnCreateProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/GetHired/resources/add (1).png"))); // NOI18N
@@ -1610,12 +1772,6 @@ private Boolean updateJob(GetHiredModel job){
         });
 
         lblDoB.setText("Date Of Birth");
-
-        txtFldContactNo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFldContactNoActionPerformed(evt);
-            }
-        });
 
         comboBoxGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Female", "others" }));
         comboBoxGender.setMaximumSize(new java.awt.Dimension(64, 22));
@@ -1900,11 +2056,11 @@ private Boolean updateJob(GetHiredModel job){
 
         lblLoginPageLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/GetHired/resources/resized.png"))); // NOI18N
 
-        jButton1.setBackground(new java.awt.Color(217, 234, 253));
-        jButton1.setText("Search For the Perfect Employee?");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnLoginAsAdmin.setBackground(new java.awt.Color(217, 234, 253));
+        btnLoginAsAdmin.setText("Search For the Perfect Employee?");
+        btnLoginAsAdmin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnLoginAsAdminActionPerformed(evt);
             }
         });
 
@@ -1932,7 +2088,7 @@ private Boolean updateJob(GetHiredModel job){
                         .addGap(176, 176, 176))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginLayout.createSequentialGroup()
                         .addGroup(pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
+                            .addComponent(btnLoginAsAdmin)
                             .addGroup(pnlLoginLayout.createSequentialGroup()
                                 .addGap(20, 20, 20)
                                 .addComponent(lblRegistration, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1987,7 +2143,7 @@ private Boolean updateJob(GetHiredModel job){
                     .addComponent(lblRegistration)
                     .addComponent(btnRegister))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addComponent(btnLoginAsAdmin)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 191, Short.MAX_VALUE)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32))
@@ -2022,48 +2178,39 @@ private Boolean updateJob(GetHiredModel job){
         loadScreen("RegisterScreen");
     }//GEN-LAST:event_btnRegisterActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-String EmailFromGUI=txtfldEmail.getText(); 
-String PasswordfRomGUI=new String(txtfldPassword.getPassword());
+    private void btnLoginAsAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginAsAdminActionPerformed
+        String EmailFromGUI = txtfldEmail.getText();
+        String PasswordfRomGUI = new String(txtfldPassword.getPassword());
+//set string as Admin 
+        String Email = "Admin";
+        String Password = "Admin";
+        //verify email as Admin
+        if (EmailFromGUI.equals(Email)) {
+            //verify password as email
+            if (PasswordfRomGUI.equals(Password)) {
+                //load admin Screesn
+                loadScreen("AdminScreen");
+            } else {
+                //show error message if the data is incorrect
+                JOptionPane.showMessageDialog(this, "Please enter correct username or password", "Error!",
+                        JOptionPane.ERROR_MESSAGE);
 
-        String Email="Admin";
-        String Password="Admin";
-        if(EmailFromGUI.equals(Email)){
-            if(PasswordfRomGUI.equals(Password))// TODO add your handling code here:
-        loadScreen("AdminScreen");
+            }
         }
-        else{
-            JOptionPane.showMessageDialog(this, "Please enter correct username or password", "Error!", JOptionPane.ERROR_MESSAGE);
-        }
-       
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void txtFldDoBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldDoBActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFldDoBActionPerformed
-
-    private void txtFldAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldAddressActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFldAddressActionPerformed
+    }//GEN-LAST:event_btnLoginAsAdminActionPerformed
 
     private void btnCreateProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateProfileActionPerformed
-        // TODO add your handling code here:try{
-    try{if(addProfile()==true){
-        JOptionPane.showMessageDialog(this,"Profile Built!","Successful",JOptionPane.INFORMATION_MESSAGE);
-    }
-    else{
-        JOptionPane.showMessageDialog(this,"Error","Error",JOptionPane.INFORMATION_MESSAGE);
-    }// TODO add your handling code here:
-}
-catch (Exception e) {
-        // Catch any other unexpected exceptions
-        JOptionPane.showMessageDialog(this, "An error occurred while adding the company.", "Error", JOptionPane.ERROR_MESSAGE);
-    }
+        try {
+            if (addProfile() == true) {
+                JOptionPane.showMessageDialog(this, "Profile Built!", "Successful", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid data. Please enter a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            // Catch any other unexpected exceptions
+            JOptionPane.showMessageDialog(this, "An error occurred while adding the profile.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnCreateProfileActionPerformed
-
-    private void txtFldContactNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldContactNoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFldContactNoActionPerformed
 
     private void txtFldQualificationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldQualificationActionPerformed
         // TODO add your handling code here:
@@ -2074,49 +2221,22 @@ catch (Exception e) {
     }//GEN-LAST:event_txtFldJobTitleActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-                                        
-       // TODO add your handling code here:
-         // TODO add your handling code here:
-        String username= txtfldEmail.getText();
-        String password= txtfldPassword.getText();
-        
-        
+
+        // Get email and password from the textfield
+        String username = txtfldEmail.getText();
+        String password = txtfldPassword.getText();
+
+        //verify if the fields are empty or not
         if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(pnlLogin, "Please fill out all the fields","Failed", JOptionPane.WARNING_MESSAGE);
+            //display error message in the fields are empty
+            JOptionPane.showMessageDialog(pnlLogin, "Please fill out all the fields", "Failed",
+                    JOptionPane.WARNING_MESSAGE);
+        } else {
+            //load welcome panel if the verifaction is completed
+            loadScreen("WelcomeScreen");
         }
-        else{
-       
-        loadScreen("WelcomeScreen");}
-       // TODO add your handling code here:
+
     }//GEN-LAST:event_btnLoginActionPerformed
-
-    private void txtFldCompanyNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldCompanyNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFldCompanyNameActionPerformed
-
-    private void txtFldAddressRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldAddressRegisterActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFldAddressRegisterActionPerformed
-
-    private void txtFldContactNoRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldContactNoRegisterActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFldContactNoRegisterActionPerformed
-
-    private void txtFldDOBRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldDOBRegisterActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFldDOBRegisterActionPerformed
-
-    private void txtFldEmailRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldEmailRegisterActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFldEmailRegisterActionPerformed
-
-    private void txtFldpasswordRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldpasswordRegisterActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFldpasswordRegisterActionPerformed
-
-    private void txtFldReconfirmPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldReconfirmPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFldReconfirmPasswordActionPerformed
 
     private void btnRegisterFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterFormActionPerformed
         // TODO add your handling code here:
@@ -2127,49 +2247,46 @@ catch (Exception e) {
         loadScreen("LoginScreen");
     }//GEN-LAST:event_btnBackToLoginActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void btnSortByCompanyIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSortByCompanyIdActionPerformed
+List<GetHiredModel> sortedList = insertionSort.sortByCompanyId(companyList, false);
+        loadCompanyToTable(sortedList);       
+
+    }//GEN-LAST:event_btnSortByCompanyIdActionPerformed
 
     private void btnDeleteCompanyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteCompanyActionPerformed
         // TODO add your handling code here:
-        try{
-         int CompanyId=Integer.parseInt(txtfldDeleteCompanyId.getText());
-         
-        if(deletedCompany(CompanyId)==true)
-        {
-        JOptionPane.showMessageDialog(this, "Company Deleted Sucessfully!!","Deleted",JOptionPane.INFORMATION_MESSAGE);
-        }
-        else{
-        JOptionPane.showMessageDialog(this, "Enter Valid Id","Not Deleted",JOptionPane.ERROR_MESSAGE);
-    }
-       
-        }
-        catch(NumberFormatException e){
-         JOptionPane.showMessageDialog(this, "Please Enter A number/ID","Not Deleted",JOptionPane.ERROR_MESSAGE);   
+        try {
+            int CompanyId = Integer.parseInt(txtfldDeleteCompanyId.getText());
+
+            if (deletedCompany(CompanyId) == true) {
+                JOptionPane.showMessageDialog(this, "Company Deleted Sucessfully!!", "Deleted", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Enter Valid Id", "Not Deleted", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please Enter A number/ID", "Not Deleted", JOptionPane.ERROR_MESSAGE);
         }
 
     }//GEN-LAST:event_btnDeleteCompanyActionPerformed
 
     private void btnAddAJobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddAJobActionPerformed
 
-try{
-if (addJob()==true){
-   JOptionPane.showMessageDialog(this,"Job added successfully","Success",JOptionPane.INFORMATION_MESSAGE);
-}
-else
-{
-     JOptionPane.showMessageDialog(this,"Job added successfully","Success",JOptionPane.INFORMATION_MESSAGE);
-}}
-catch(NumberFormatException e) {
-        // Handle invalid input for CompanyId (non-numeric value)
-        JOptionPane.showMessageDialog(this, "Invalid Company ID. Please enter a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        // Catch any other unexpected exceptions
-        JOptionPane.showMessageDialog(this, "An error occurred while adding the company.", "Error", JOptionPane.ERROR_MESSAGE);
-    }
-    
-
+        try {
+            if (addJob() == true) {
+                JOptionPane.showMessageDialog(this, "Job added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Job not added", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            // Handle invalid input for CompanyId (non-numeric value)
+            JOptionPane.showMessageDialog(this, "Invalid data. Please enter a valid number!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            // Catch any other unexpected exceptions
+            JOptionPane.showMessageDialog(this, "An error occurred while adding the job.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnAddAJobActionPerformed
 
     private void BtnClearFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnClearFormActionPerformed
@@ -2182,7 +2299,7 @@ catch(NumberFormatException e) {
         txtFldEmail.setText("");
         txtFldEducation.setText("");
         ComboBoxYearsOfExperience.setSelectedItem("None");
-        
+
     }//GEN-LAST:event_BtnClearFormActionPerformed
 
     private void btnFindAJobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindAJobActionPerformed
@@ -2195,29 +2312,9 @@ catch(NumberFormatException e) {
         loadScreen("WelcomeScreen");
     }//GEN-LAST:event_btnBackActionPerformed
 
-    private void txtFieldJobIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldJobIdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldJobIdActionPerformed
-
-    private void txtFieldContactNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldContactNoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldContactNoActionPerformed
-
-    private void txtFieldAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldAddressActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldAddressActionPerformed
-
-    private void txtFieldFullNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldFullNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldFullNameActionPerformed
-
-    private void txtFieldQualificationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldQualificationActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFieldQualificationActionPerformed
-
     private void btnLogOutProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutProfileActionPerformed
         // TODO add your handling code here:
-       loadScreen("LoginScreen");
+        loadScreen("LoginScreen");
     }//GEN-LAST:event_btnLogOutProfileActionPerformed
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
@@ -2225,10 +2322,10 @@ catch(NumberFormatException e) {
         loadScreen("LoginScreen");
     }//GEN-LAST:event_btnLogOutActionPerformed
 
-    private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
+    private void ButnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButnBackActionPerformed
         // TODO add your handling code here:
         loadScreen("WelcomeScreen");
-    }//GEN-LAST:event_BackActionPerformed
+    }//GEN-LAST:event_ButnBackActionPerformed
 
     private void btnBuildYourProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuildYourProfileActionPerformed
         // TODO add your handling code here:
@@ -2256,71 +2353,53 @@ catch(NumberFormatException e) {
     }//GEN-LAST:event_Back1ActionPerformed
 
     private void BtnApplyForJobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnApplyForJobActionPerformed
-try{
-    if(addApplication()==true){
-        JOptionPane.showMessageDialog(this,"Applied!","Successful",JOptionPane.INFORMATION_MESSAGE);
-    }
-    else{
-        JOptionPane.showMessageDialog(this,"Not Applied!","Not-Successful",JOptionPane.INFORMATION_MESSAGE);
-    }// TODO add your handling code here:
-}
-catch(NumberFormatException e) {
-        // Handle invalid input for CompanyId (non-numeric value)
-        JOptionPane.showMessageDialog(this, "Invalid Job ID. Please enter a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        // Catch any other unexpected exceptions
-        JOptionPane.showMessageDialog(this, "An error occurred while adding the company.", "Error", JOptionPane.ERROR_MESSAGE);
-    }
+        try {
+            if (addApplication() == true) {
+                JOptionPane.showMessageDialog(this, "Applied!", "Successful", JOptionPane.INFORMATION_MESSAGE);
+            }
+            // TODO add your handling code here:
+        } catch (NumberFormatException e) {
+            // Handle invalid input for CompanyId (non-numeric value)
+            JOptionPane.showMessageDialog(this, "Invalid Job ID. Please enter a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            // Catch any other unexpected exceptions
+            JOptionPane.showMessageDialog(this, "An error occurred while applying for job.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_BtnApplyForJobActionPerformed
 
     private void btnAddACompanyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddACompanyActionPerformed
         // TODO add your handling code here:
-       try{ 
-           int CompanyId=Integer.parseInt(txtFldCompanyId.getText());
-       
-        String CompanyName=txtFldCompanyName.getText();    
-        String CompanyLocation=txtFldCompanyLocation.getText();
-        String CompanyContact=txtFldContactDetails.getText();
-        String JobVacancyStatus=(String) comboBoxJobStatus.getSelectedItem();
-        if (txtFldCompanyId.getText().isEmpty() || 
-            CompanyName.isEmpty() || 
-            CompanyLocation.isEmpty() || 
-            CompanyContact.isEmpty() || 
-            JobVacancyStatus == null || JobVacancyStatus.isEmpty()) {
-            
-            JOptionPane.showMessageDialog(this, "Please fill all the fields.", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-        GetHiredModel company=new GetHiredModel(CompanyId,CompanyName,CompanyLocation,CompanyContact,JobVacancyStatus);
-        addCompany(company);
-          JOptionPane.showMessageDialog(this, "Company Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-        }}
-       catch (NumberFormatException e) {
-        // Handle invalid input for CompanyId (non-numeric value)
-        JOptionPane.showMessageDialog(this, "Invalid Company ID. Please enter a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        // Catch any other unexpected exceptions
-        JOptionPane.showMessageDialog(this, "An error occurred while adding the company.", "Error", JOptionPane.ERROR_MESSAGE);
-    }
-       
+        try {
+            if (addCompany() == true) {
+                JOptionPane.showMessageDialog(this, "Company added sucessfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            // Handle invalid input for CompanyId (non-numeric value)
+            JOptionPane.showMessageDialog(this, "Invalid Company ID. Please enter a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            // Catch any other unexpected exceptions
+            JOptionPane.showMessageDialog(this, "An error occurred while adding the company.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }//GEN-LAST:event_btnAddACompanyActionPerformed
 
     private void btnDeleteApplicationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteApplicationActionPerformed
         // TODO add your handling code here:
-       try{ int JobId=Integer.parseInt(txtFieldJobId.getText());
-        String Name=txtFieldFullName.getText();
-        if(deletedApplication(Name,JobId)==true){
-            JOptionPane.showMessageDialog(this,"Application Deleted","Successful",JOptionPane.INFORMATION_MESSAGE);
-        }
-        else{
-            JOptionPane.showMessageDialog(this,"Application Not Deleted","Not-Successful",JOptionPane.INFORMATION_MESSAGE);
-        }}
-        catch (NumberFormatException e) {
-        // Handle invalid JobId input (non-numeric value)
-        JOptionPane.showMessageDialog(this, "Invalid Job ID. Please enter a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        // Catch any other unexpected exceptions
-        JOptionPane.showMessageDialog(this, "An error occurred while deleting the application.", "Error", JOptionPane.ERROR_MESSAGE);
+        try {
+            int JobId = Integer.parseInt(txtFieldJobId.getText());
+            String Name = txtFieldFullName.getText();
+            if (deletedApplication(Name, JobId) == true) {
+                JOptionPane.showMessageDialog(this, "Application Deleted", "Successful", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Application Not Deleted", "Not-Successful", JOptionPane.INFORMATION_MESSAGE);
             }
+        } catch (NumberFormatException e) {
+            // Handle invalid JobId input (non-numeric value)
+            JOptionPane.showMessageDialog(this, "Invalid Job ID. Please enter a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            // Catch any other unexpected exceptions
+            JOptionPane.showMessageDialog(this, "An error occurred while deleting the application.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnDeleteApplicationActionPerformed
 
     private void btnClearFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearFormActionPerformed
@@ -2328,8 +2407,8 @@ catch(NumberFormatException e) {
         txtFieldJobId.setText("");
         txtFieldFullName.setText("");
         txtFieldContactNo.setText("");
-         txtFieldQualification.setText("");
-          txtFieldAddress.setText("");
+        txtFieldQualification.setText("");
+        txtFieldAddress.setText("");
     }//GEN-LAST:event_btnClearFormActionPerformed
 
     private void btnLogOutAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutAdminActionPerformed
@@ -2338,140 +2417,133 @@ catch(NumberFormatException e) {
     }//GEN-LAST:event_btnLogOutAdminActionPerformed
 
     private void btnDeleteJobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteJobActionPerformed
-        try{int JobId=Integer.parseInt(txtfieldDeleteJobId.getText());
-        if(deletedJob(JobId)==true){
+        try {
+            int JobId = Integer.parseInt(txtfieldDeleteJobId.getText());
+            if (deletedJob(JobId) == true) {
 
-            JOptionPane.showMessageDialog(this,"Job Deleted Successfully!!","Successful",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Job Deleted Successfully!!", "Successful", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Job Not Deleted !!", "Error", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            // Handle invalid input for JobId
+            JOptionPane.showMessageDialog(this, "Invalid Job ID. Please enter a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            // Catch any other unexpected exceptions
+            JOptionPane.showMessageDialog(this, "An error occurred while deleting the job.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        else{
-            JOptionPane.showMessageDialog(this,"Job Not Deleted !!","Error",JOptionPane.INFORMATION_MESSAGE);
-        } 
-        }
-        catch (NumberFormatException e) {
-        // Handle invalid input for JobId
-        JOptionPane.showMessageDialog(this, "Invalid Job ID. Please enter a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        // Catch any other unexpected exceptions
-        JOptionPane.showMessageDialog(this, "An error occurred while deleting the job.", "Error", JOptionPane.ERROR_MESSAGE);
-    }
-// TODO add your handling code here:
+
     }//GEN-LAST:event_btnDeleteJobActionPerformed
 
     private void btnUpdateAJobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateAJobActionPerformed
         // TODO add your handling code here:
-    try{
-    int JobId=Integer.parseInt(txtFldJobId.getText()) ;
-    String JobName=txtFldJobTitle.getText(); 
-    String JobType=txtFldJobType.getText();
-    String JobLocation=txtFldJobLocation.getText();
-    int Salary=Integer.parseInt(txtFldSalary.getText());
-    String Deadline=txtFldDeadline.getText();
-    String Qualification=txtFldQualification.getText();
-    String CompanyName=txtFldCompanyNameAddJob.getText();
-    if (txtFldJobId.getText().isEmpty()||txtFldJobTitle.getText().isEmpty()||txtFldJobType.getText().isEmpty()||txtFldJobLocation.getText().isEmpty()||txtFldSalary.getText().isEmpty()
-        ||txtFldDeadline.getText().isEmpty()||txtFldQualification.getText().isEmpty()||txtFldCompanyNameAddJob.getText().isEmpty()){
-    JOptionPane.showMessageDialog(this,"Please Fill All The Fields,Job NOt Updated!!","NOT-Sucessful",JOptionPane.ERROR_MESSAGE);
-    }
-    else{
-   GetHiredModel updatedjob=new GetHiredModel( JobId, JobName, JobType, JobLocation,Salary, Deadline,Qualification, CompanyName);
-        updateJob(updatedjob);
-        JOptionPane.showMessageDialog(this,"Job Updated!!","Sucessful",JOptionPane.INFORMATION_MESSAGE);
-  
-    }}
-    
-    catch (NumberFormatException e) {
-        // Handle cases where parsing integers fails (e.g., invalid number format)
-        JOptionPane.showMessageDialog(this, "Invalid input for Job ID or Salary. Please enter valid numbers!", "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        // Handle any other unexpected exceptions
-        JOptionPane.showMessageDialog(this, "An error occurred while adding the job.", "Error", JOptionPane.ERROR_MESSAGE);
-          // Print stack trace for debugging purposes
-    }
-    
+        try {
+
+            if (updateJob() == true) //shows successful message after information updates
+            {
+                JOptionPane.showMessageDialog(this, "Job Updated!!", "Sucessful", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid input for Job ID or Salary. Please enter valid numbers!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            // Handle any other unexpected exceptions
+            JOptionPane.showMessageDialog(this, "An error occurred while adding the job.", "Error", JOptionPane.ERROR_MESSAGE);
+
+        }
+
     }//GEN-LAST:event_btnUpdateAJobActionPerformed
 
     private void btnUpdateDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateDetailsActionPerformed
         // TODO add your handling code here:
-      
-        try{int CompanyId=Integer.parseInt(txtFldCompanyId.getText());
-        String CompanyName=txtFldCompanyName.getText();    
-        String CompanyLocation=txtFldCompanyLocation.getText();
-        String CompanyContact=txtFldContactDetails.getText();
-        String JobVacancyStatus=(String) comboBoxJobStatus.getSelectedItem();
-        if(txtFldCompanyId.getText().isEmpty()||
-            txtFldCompanyName.getText().isEmpty()||
-            txtFldCompanyLocation.getText().isEmpty()||
-            txtFldContactDetails.getText().isEmpty()){
-        JOptionPane.showMessageDialog(this,"Please Enter All Fields", "Error", JOptionPane.ERROR_MESSAGE);
+
+        try {
+            if (updateCompany() == true) {
+                JOptionPane.showMessageDialog(this, "Company updated!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            // Handle invalid number input for CompanyId
+            JOptionPane.showMessageDialog(this, "Invalid Company ID. Please enter a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            // Handle any other unexpected exceptions
+            JOptionPane.showMessageDialog(this, "An error occurred while updating the details.", "Error", JOptionPane.ERROR_MESSAGE);
+            // Optionally print the stack trace for debugging
         }
-        
-        else{
-        GetHiredModel updateCompany=new GetHiredModel(CompanyId,CompanyName,CompanyLocation,CompanyContact,JobVacancyStatus);
-        updateCompany(updateCompany);
-        JOptionPane.showMessageDialog(this,"Company Details Updated", "Sucessful", JOptionPane.INFORMATION_MESSAGE);
-        }}
-         catch (NumberFormatException e) {
-        // Handle invalid number input for CompanyId
-        JOptionPane.showMessageDialog(this, "Invalid Company ID. Please enter a valid number!", "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        // Handle any other unexpected exceptions
-        JOptionPane.showMessageDialog(this, "An error occurred while updating the details.", "Error", JOptionPane.ERROR_MESSAGE);
-         // Optionally print the stack trace for debugging
-    }
     }//GEN-LAST:event_btnUpdateDetailsActionPerformed
 
     private void LogOutAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutAdminActionPerformed
-loadScreen("LoginScreen");        // TODO add your handling code here:
+        loadScreen("LoginScreen");        // TODO add your handling code here:
     }//GEN-LAST:event_LogOutAdminActionPerformed
 
     private void btnUpdateProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateProfileActionPerformed
         // TODO add your handling code here:
-       try{String UserName=txtFldName.getText();
-     String UserAddress=txtFldAddress.getText();
-     String UserContactNo=txtFldContactNo.getText();
-     String UserDOB=txtFldDoB.getText();
-     String UserGender=(String)comboBoxGender.getSelectedItem();
-     String UserEmail=txtFldEmail.getText();
-     String UserQualification=txtFldEducation.getText();
-     String UserYearsOfExperience=(String)ComboBoxYearsOfExperience.getSelectedItem();
-    if (txtFldName.getText().isEmpty()||txtFldAddress.getText().isEmpty()||txtFldContactNo.getText().isEmpty()||txtFldDoB.getText().isEmpty()
-        ||txtFldEmail.getText().isEmpty()||txtFldEducation.getText().isEmpty()){
-    JOptionPane.showMessageDialog(this,"Please Fill All The Fields,Profile NOt Added!!","Error",JOptionPane.ERROR_MESSAGE);
-    }
-    else{
-    GetHiredModel updateProfile=new GetHiredModel(UserName,  UserAddress,  UserContactNo,  UserDOB,  UserGender,  UserEmail,  UserQualification,  UserYearsOfExperience);
-       updateProfile(updateProfile);
-        JOptionPane.showMessageDialog(this,"Profile Details Updated", "Successful", JOptionPane.INFORMATION_MESSAGE);
-        }}
-         catch (Exception e) {
-        // Handle any other unexpected exceptions
-        JOptionPane.showMessageDialog(this, "An error occurred while updating the details.", "Error", JOptionPane.ERROR_MESSAGE);
-         // Optionally print the stack trace for debugging
-    }
+        try {
+            if (updateProfile() == true) {
+                JOptionPane.showMessageDialog(this, "Profile Details Updated", "Successful", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {
+            // Handle any other unexpected exceptions
+            JOptionPane.showMessageDialog(this, "An error occurred while updating the details.", "Error", JOptionPane.ERROR_MESSAGE);
+            // Optionally print the stack trace for debugging
+        }
     }//GEN-LAST:event_btnUpdateProfileActionPerformed
 
     private void btnDeleteProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteProfileActionPerformed
         // TODO add your handling code here:
-          try{
-              String ContactNo=txtFldContactNoDelete.getText();
-        if(deletedProfile(ContactNo)==true){
+        try {
+            String ContactNo = txtFldContactNoDelete.getText();
+            if (deletedProfile(ContactNo) == true) {
 
-            JOptionPane.showMessageDialog(this,"Profile Deleted Successfully!!","Successful",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Profile Deleted Successfully!!", "Successful", JOptionPane.INFORMATION_MESSAGE);
+            } 
+            else {
+                JOptionPane.showMessageDialog(this, "Profile Not Deleted !!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            // Catch any other unexpected exceptions
+            JOptionPane.showMessageDialog(this, "An error occurred while deleting the job.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        else{
-            JOptionPane.showMessageDialog(this,"Profile Not Deleted !!","Error",JOptionPane.ERROR_MESSAGE);
-        } 
-        }
-        catch (Exception e) {
-        // Catch any other unexpected exceptions
-        JOptionPane.showMessageDialog(this, "An error occurred while deleting the job.", "Error", JOptionPane.ERROR_MESSAGE);
-    }
     }//GEN-LAST:event_btnDeleteProfileActionPerformed
 
     private void btnClearFormDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearFormDeleteActionPerformed
-txtFldContactNoDelete.setText("");
-txtFldNameDelete.setText("");// TODO add your handling code here:
+        txtFldContactNoDelete.setText("");
+        txtFldNameDelete.setText("");// TODO add your handling code here:
     }//GEN-LAST:event_btnClearFormDeleteActionPerformed
+
+    private void btnSortByIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSortByIdActionPerformed
+       List<GetHiredModel> sortedList = mergeSort.sortById(joblist, false);
+       loadJobToTable(sortedList);
+               
+    }//GEN-LAST:event_btnSortByIdActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+List<GetHiredModel> sortedList = selectionSort.sortByCompanyName(companyList, false);
+       BinarySearch search=new BinarySearch();
+       GetHiredModel searchedData=search.searchByName(txtFldSearch.getText().trim(),sortedList,0,sortedList.size()-1);
+       if(searchedData!=null){
+            JOptionPane.showMessageDialog(this, "Data found ", "Found", JOptionPane.INFORMATION_MESSAGE);
+             List<GetHiredModel> tempList = new ArrayList<>();
+        tempList.add(searchedData);
+        loadCompanyToTable(tempList);
+            
+        }
+       else{
+             JOptionPane.showMessageDialog(this, "Data not found", "Not Found", JOptionPane.ERROR_MESSAGE);
+   
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnSortByCompanyNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSortByCompanyNameActionPerformed
+        // TODO add your handling code here:
+        List<GetHiredModel> sortedList = selectionSort.sortByCompanyName(companyList, false);
+        loadCompanyToTable(sortedList); 
+    }//GEN-LAST:event_btnSortByCompanyNameActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        loadCompanyToTable(companyList); 
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2509,10 +2581,10 @@ txtFldNameDelete.setText("");// TODO add your handling code here:
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Back;
     private javax.swing.JButton Back1;
     private javax.swing.JButton BtnApplyForJob;
     private javax.swing.JButton BtnClearForm;
+    private javax.swing.JButton ButnBack;
     private javax.swing.JComboBox<String> ComboBoxYearsOfExperience;
     private javax.swing.JLabel LblLogo;
     private javax.swing.JLabel LblLogo1;
@@ -2543,8 +2615,12 @@ txtFldNameDelete.setText("");// TODO add your handling code here:
     private javax.swing.JButton btnLogOutJob;
     private javax.swing.JButton btnLogOutProfile;
     private javax.swing.JButton btnLogin;
+    private javax.swing.JButton btnLoginAsAdmin;
     private javax.swing.JButton btnRegister;
     private javax.swing.JButton btnRegisterForm;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnSortByCompanyId;
+    private javax.swing.JButton btnSortByCompanyName;
     private javax.swing.JButton btnSortById;
     private javax.swing.JButton btnUpdateAJob;
     private javax.swing.JButton btnUpdateDetails;
@@ -2552,8 +2628,6 @@ txtFldNameDelete.setText("");// TODO add your handling code here:
     private javax.swing.JComboBox<String> comboBoxGender;
     private javax.swing.JComboBox<String> comboBoxJobStatus;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -2562,7 +2636,6 @@ txtFldNameDelete.setText("");// TODO add your handling code here:
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lablDeleteTitle;
     private javax.swing.JLabel lblAddress;
     private javax.swing.JLabel lblAddressRegister;
@@ -2652,6 +2725,7 @@ txtFldNameDelete.setText("");// TODO add your handling code here:
     private javax.swing.JTextField txtFldQualification;
     private javax.swing.JTextField txtFldReconfirmPassword;
     private javax.swing.JTextField txtFldSalary;
+    private javax.swing.JTextField txtFldSearch;
     private javax.swing.JTextField txtFldpasswordRegister;
     private javax.swing.JTextField txtfieldDeleteJobId;
     private javax.swing.JTextField txtfldDeleteCompanyId;
