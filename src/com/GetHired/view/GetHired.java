@@ -45,7 +45,7 @@ public class GetHired extends javax.swing.JFrame {
     Loads the specifief screen
     @param screenName
      */
-    private void loadScreen(String screenName) {
+    public void loadScreen(String screenName) {
         cardLayout.show(getContentPane(), screenName);
     }
 
@@ -53,7 +53,7 @@ public class GetHired extends javax.swing.JFrame {
    Initialize layout
    adds panel to layout screen
      */
-    private void initializeLayout() {
+    public void initializeLayout() {
         cardLayout = new java.awt.CardLayout();
         getContentPane().setLayout(cardLayout);
 
@@ -80,7 +80,7 @@ public class GetHired extends javax.swing.JFrame {
         for (GetHiredModel job : jobs) {
 
             model.addRow(new Object[]{job.getJobId(), job.getJobName(), job.getJobType(), job.getJobLocation(),
-                 job.getJobSalary(), job.getJobDeadline(), job.getJobQualification(), job.getCompanyName()});
+                 job.getJobSalary(), job.getJobDeadline(), job.getJobQualification(), job.getJobCompanyName()});
         }
     }
 
@@ -238,37 +238,46 @@ public class GetHired extends javax.swing.JFrame {
      *
      * @return true if the job is added else returns false
      */
-    private boolean addJob() {
-        int JobId = Integer.parseInt(txtFldJobId.getText());
-        String JobName = txtFldJobTitle.getText();
-        String JobType = txtFldJobType.getText();
-        String JobLocation = txtFldJobLocation.getText();
-        int Salary = Integer.parseInt(txtFldSalary.getText());
-        String Deadline = txtFldDeadline.getText();
-        String Qualification = txtFldQualification.getText();
-        String CompanyName = txtFldCompanyNameAddJob.getText();
-        if (txtFldJobId.getText().isEmpty() || txtFldJobTitle.getText().isEmpty()
-                || txtFldJobType.getText().isEmpty() || txtFldJobLocation.getText().isEmpty() || txtFldSalary.getText().isEmpty()
-                || txtFldDeadline.getText().isEmpty() || txtFldQualification.getText().isEmpty()
-                || txtFldCompanyNameAddJob.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please Fill All The Fields,Job NOt Added!!", "NOT-Sucessful",
-                    JOptionPane.ERROR_MESSAGE);
-            return false;
-        } else {
-            for (GetHiredModel jobId : joblist) {
-                if (JobId == jobId.getJobId()) {
-                    JOptionPane.showMessageDialog(this, "Job Id already exists!!", "NOT-Sucessful", JOptionPane.ERROR_MESSAGE);
-                    return false;
+private boolean addJob() {
+    int JobId = Integer.parseInt(txtFldJobId.getText());
+    String JobName = txtFldJobTitle.getText();
+    String JobType = txtFldJobType.getText();
+    String JobLocation = txtFldJobLocation.getText();
+    int Salary = Integer.parseInt(txtFldSalary.getText());
+    String Deadline = txtFldDeadline.getText();
+    String Qualification = txtFldQualification.getText();
+    String CompanyName = txtFldCompanyNameAddJob.getText();
 
-                }
-                GetHiredModel job = new GetHiredModel(JobId, JobName, JobType, JobLocation, Salary, Deadline, Qualification, CompanyName);
-                joblist.add(job);
-                loadJobToTable(joblist);
-                return true;
-            }
-        }
+    // Check if any field is empty
+    if (txtFldJobId.getText().isEmpty() || txtFldJobTitle.getText().isEmpty()
+            || txtFldJobType.getText().isEmpty() || txtFldJobLocation.getText().isEmpty() 
+            || txtFldSalary.getText().isEmpty() || txtFldDeadline.getText().isEmpty() 
+            || txtFldQualification.getText().isEmpty() || txtFldCompanyNameAddJob.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please Fill All The Fields, Job Not Added!!", 
+                "NOT-Successful", JOptionPane.ERROR_MESSAGE);
         return false;
     }
+
+    // Check for duplicate Job ID
+    for (GetHiredModel jobId : joblist) {
+        if (JobId == jobId.getJobId()) {
+            JOptionPane.showMessageDialog(this, "Job Id already exists!!", 
+                    "NOT-Successful", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    // Add job if no duplicate found
+    GetHiredModel job = new GetHiredModel(JobId, JobName, JobType, JobLocation, 
+            Salary, Deadline, Qualification, CompanyName);
+    joblist.add(job);
+    loadJobToTable(joblist);
+
+    JOptionPane.showMessageDialog(this, "Job Added Successfully!", 
+            "Successful", JOptionPane.INFORMATION_MESSAGE);
+    return true;
+}
+
 /*
     deletes job from joblist
     @param JobId
@@ -305,30 +314,21 @@ Updates job from the job list
         //validates if all the test fields are filled
         if (txtFldJobId.getText().isEmpty() || txtFldJobTitle.getText().isEmpty()
                 || txtFldJobType.getText().isEmpty() || txtFldJobLocation.getText().isEmpty() || txtFldSalary.getText().isEmpty()
-                || txtFldDeadline.getText().isEmpty() || txtFldQualification.getText().isEmpty()
-                || txtFldCompanyNameAddJob.getText().isEmpty()) {
+                || txtFldDeadline.getText().isEmpty() || txtFldQualification.getText().isEmpty()|| txtFldCompanyNameAddJob.getText().isEmpty()) {
             //prints error if one or more textfields are empty
             JOptionPane.showMessageDialog(this, "Please Fill All The Fields,Job not updated!!", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         } 
         else {
-            
-            //compares the id in text field to the ids in list
+//compares the id in text field to the ids in list
             for (GetHiredModel jobupdate : joblist) {
                 //if id is matched updates the details of the job
-                if (JobId == jobupdate.getJobId()) {
-                    jobupdate.setJobName(JobName);
-                    jobupdate.setJobLocation(JobLocation);
-                    jobupdate.setJobDeadline(Deadline);
-                    jobupdate.setJobQualification(Qualification);
-                    jobupdate.setJobSalary(Salary);
-                    jobupdate.setJobType(JobType);
-                    jobupdate.setJobCompanyName(CompanyName);
+                if (JobId == jobupdate.getJobId()) {jobupdate.setJobName(JobName);jobupdate.setJobLocation(JobLocation);jobupdate.setJobDeadline(Deadline);
+                jobupdate.setJobQualification(Qualification);jobupdate.setJobSalary(Salary);jobupdate.setJobType(JobType);jobupdate.setJobCompanyName(CompanyName);
                     //loads updated data to table
                     loadJobToTable(joblist);
                     return true;
-                }
-            }
+                }}
             //shows error if job id does not match
             JOptionPane.showMessageDialog(this, "Job Id Not found", "Error", JOptionPane.ERROR_MESSAGE);
             loadJobToTable(joblist);
@@ -1553,7 +1553,7 @@ Adds company to company list and displays it to users
 
             },
             new String [] {
-                "Job ID", "Job Category", "Type", "Job Location", "Offered Salary", "Deadline", "Qualifucation"
+                "Job ID", "Job Category", "Type", "Job Location", "Offered Salary", "Deadline", "Qualifications", "Company name"
             }
         ));
         scrollpaneAddJob.setViewportView(tblAddJob);
@@ -2179,24 +2179,34 @@ Adds company to company list and displays it to users
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnLoginAsAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginAsAdminActionPerformed
-        String EmailFromGUI = txtfldEmail.getText();
-        String PasswordfRomGUI = new String(txtfldPassword.getPassword());
-//set string as Admin 
-        String Email = "Admin";
-        String Password = "Admin";
-        //verify email as Admin
-        if (EmailFromGUI.equals(Email)) {
-            //verify password as email
-            if (PasswordfRomGUI.equals(Password)) {
-                //load admin Screesn
+     String emailFromGUI = txtfldEmail.getText();
+    String passwordFromGUI = new String(txtfldPassword.getPassword());
+
+    // Predefined admin credentials
+    String adminEmail = "Admin";
+    String adminPassword = "Admin";
+
+    // Check if either the email or password fields are empty
+    if (emailFromGUI.isEmpty() || passwordFromGUI.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please fill in all the fields.", "Error!", JOptionPane.WARNING_MESSAGE);
+    } else {
+        // Verify if the entered email matches the admin email
+        if (emailFromGUI.equals(adminEmail)) {
+            // Verify if the entered password matches the admin password
+            if (passwordFromGUI.equals(adminPassword)) {
+                // Load the admin screen if credentials are correct
                 loadScreen("AdminScreen");
             } else {
-                //show error message if the data is incorrect
-                JOptionPane.showMessageDialog(this, "Please enter correct username or password", "Error!",
-                        JOptionPane.ERROR_MESSAGE);
-
+                // Show error message if password is incorrect
+                JOptionPane.showMessageDialog(this, "Incorrect password. Please try again.", "Error!", JOptionPane.ERROR_MESSAGE);
             }
+        } else {
+            // Show error message if email is incorrect
+            JOptionPane.showMessageDialog(this, "Incorrect username. Please try again.", "Error!", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+
     }//GEN-LAST:event_btnLoginAsAdminActionPerformed
 
     private void btnCreateProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateProfileActionPerformed

@@ -184,7 +184,7 @@ public class GetHiredModel {
         this.UserEmail = UserEmail;
     }
 
-    public void setUserQualification(String UserQualification) {
+    public void setUserQualification(String UserQualification){
         this.UserQualification = UserQualification;
     }
 

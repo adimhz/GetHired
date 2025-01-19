@@ -2,11 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 package com.GetHired.controller;
 import com.GetHired.model.GetHiredModel;
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+ *@author adita
+*/
 
 public class MergeSort {
     public List<GetHiredModel> sortById(List<GetHiredModel> JobList, boolean isDesc) {
@@ -37,7 +40,7 @@ public class MergeSort {
         List<GetHiredModel> merged = new ArrayList<>();
         int i = 0, j = 0;
 
-        // Merge based on the model names
+        // Merge based on the job Ids
         while (i < left.size() && j < right.size()) {
             if (shouldPlaceLeft(left.get(i).getJobId(), right.get(j).getJobId(), isDesc)) {
                 merged.add(left.get(i));
